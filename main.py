@@ -13,7 +13,7 @@ def get_answer(content):
         contents=content,
     )
 
-    print(response.text)
+    return(response.text)
 
 def send_message():
     user_text = input_entry.get()
@@ -22,13 +22,17 @@ def send_message():
         user_label = tk.Label(chat_frame, text=f"You: {user_text}", anchor="w", justify="left")
         user_label.pack(padx=10, pady=5, fill="x")
 
-        # Simulate AI response
-        ai_response = "AI: Thinking..."  # Placeholder AI response
+        # AI response
+        # ai_response = "Gemini: " + get_answer(user_text)
+        ai_response = "Gemini: " + "gemini will answer here"
         ai_label = tk.Label(chat_frame, text=ai_response, anchor="w", justify="left", bg="#f0f0f0")
         ai_label.pack(padx=10, pady=5, fill="x")
 
         # Clear the input field
         input_entry.delete(0, tk.END)
+
+def _on_mousewheel(event):
+    chat_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
 # Create the main window
 window = tk.Tk()
@@ -51,6 +55,11 @@ chat_canvas.bind('<Configure>', lambda e: chat_canvas.configure(scrollregion = c
 inner_frame = tk.Frame(chat_canvas)
 chat_canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 chat_frame = inner_frame # Update chat_frame to be the inner frame
+
+# Bind mouse wheel events to the canvas
+chat_canvas.bind("<MouseWheel>", _on_mousewheel)
+chat_canvas.bind("<Button-4>", lambda event: chat_canvas.yview_scroll(-1, "units")) # For Linux
+chat_canvas.bind("<Button-5>", lambda event: chat_canvas.yview_scroll(1, "units"))  # For Linux
 
 # Create the input field
 input_entry = tk.Entry(window)
